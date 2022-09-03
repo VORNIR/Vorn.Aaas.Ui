@@ -7,6 +7,7 @@ public static class WebAppExtension
 {
     public static void AddAaasUi(this WebApplicationBuilder builder)
     {
+        string section = "Vorn:Aaas";
         builder.Services.AddAuthentication(options =>
         {
             options.DefaultScheme = "cookies";
@@ -15,8 +16,8 @@ public static class WebAppExtension
         .AddCookie("cookies")
         .AddOpenIdConnect("oidc", options =>
         {
-            options.Authority = builder.Configuration["Aaas:Authority"];
-            options.ClientId = builder.Configuration["Aaas:ClientId"];
+            options.Authority = builder.Configuration[$"{section}:Authority"];
+            options.ClientId = builder.Configuration[$"{section}:ClientId"];
             options.MapInboundClaims = false;
             options.SaveTokens = true;
             options.Scope.Add("access");
@@ -25,7 +26,7 @@ public static class WebAppExtension
         {
             var pb = new AuthorizationPolicyBuilder()
                .RequireAuthenticatedUser();
-            string requiredAccess = builder.Configuration["Aaas:Access"];
+            string requiredAccess = builder.Configuration[$"{section}:Access"];
             if(requiredAccess != null)
                 pb = pb.RequireClaim("access", requiredAccess);
             c.DefaultPolicy = pb.Build();
