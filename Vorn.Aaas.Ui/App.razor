@@ -1,0 +1,20 @@
+﻿@using System.Reflection
+@inject NavigationManager NavigationManager
+<CascadingAuthenticationState>
+    <Router AppAssembly="@typeof(App).Assembly" AdditionalAssemblies="AdditionalAssemblies">
+        <Found Context="routeData">
+            <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
+                <NotAuthorized>
+                    <PageTitle>Not logged in</PageTitle>
+                </NotAuthorized>
+            </AuthorizeRouteView>
+        </Found>
+        <NotFound>
+            <PageTitle>Not found</PageTitle>
+            <MudAlert Severity="Severity.Warning">Not found.</MudAlert>
+        </NotFound>
+    </Router>
+</CascadingAuthenticationState>
+@code{
+    IEnumerable<Assembly> AdditionalAssemblies => AppDomain.CurrentDomain.GetAssemblies().Where(a => a.FullName?.StartsWith("Vorn") ?? false).Where(a => a.FullName != typeof(App).Assembly.FullName);
+}

@@ -1,0 +1,20 @@
+﻿<MudNavMenu>
+    @foreach(var pageDetail in Pages)
+    {
+        <MudNavLink Href="@pageDetail.Route" Match="NavLinkMatch.All">@pageDetail.Title</MudNavLink>
+    }
+</MudNavMenu>
+@code{
+    List<PageDetails> Pages = new();
+    protected override void OnInitialized()
+    {
+        var pagesWithDetails =
+            from a in AppDomain.CurrentDomain.GetAssemblies().AsParallel()
+            where a.FullName?.StartsWith("Vorn") ?? false
+            from t in a.GetTypes().Where(x => x.IsSubclassOf(typeof(ComponentBase)))
+            let attributes = t.GetCustomAttributes(typeof(PageDetails), true)
+            where attributes != null && attributes.Length > 0
+            select attributes.Cast<PageDetails>().First();
+        Pages = pagesWithDetails.ToList();
+    }
+}
