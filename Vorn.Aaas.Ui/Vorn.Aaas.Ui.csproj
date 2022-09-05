@@ -6,7 +6,7 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<AddRazorSupportForMvc>true</AddRazorSupportForMvc>
 		<PackageId>Vorn.Aaas.Ui</PackageId>
-		<Version>0.1.0</Version>
+		<Version>0.2.1</Version>
 		<Company>Vorn</Company>
 		<PackageDescription>Vorn Aaas for Ui</PackageDescription>
 		<RepositoryUrl>https://github.com/VORNIR/Vorn.Aaas.Ui</RepositoryUrl>
