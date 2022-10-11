@@ -5,7 +5,7 @@
         <MudNavLink Href="@pageDetail.Route" Icon="@pageDetail.Icon" Match="NavLinkMatch.All">@pageDetail.Title</MudNavLink>
     }
 </MudNavMenu>
-@code{
+@code {
     List<PageDetails> Pages = new();
     protected override void OnInitialized()
     {
@@ -15,6 +15,6 @@
             let attributes = t.GetCustomAttributes(typeof(PageDetails), true)
             where attributes != null && attributes.Length > 0
             select attributes.Cast<PageDetails>().First();
-        Pages = pagesWithDetails.ToList();
+        Pages = pagesWithDetails.OrderBy(p => p.Order).ToList();
     }
 }
