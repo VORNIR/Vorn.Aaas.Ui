@@ -1,7 +1,8 @@
 ﻿@using System.Reflection
 @inject NavigationManager NavigationManager
+@inject AdditionalAssembliesRegistry registry
 <CascadingAuthenticationState>
-    <Router AppAssembly="@typeof(App).Assembly" AdditionalAssemblies="AdditionalAssemblies">
+    <Router AppAssembly="@typeof(App).Assembly" AdditionalAssemblies="registry.Assemblies">
         <Found Context="routeData">
             <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
                 <NotAuthorized>
@@ -15,6 +16,3 @@
         </NotFound>
     </Router>
 </CascadingAuthenticationState>
-@code{
-    IEnumerable<Assembly> AdditionalAssemblies => AppDomain.CurrentDomain.GetAssemblies().Where(a => a.FullName?.StartsWith("Vorn") ?? false).Where(a => a.FullName != typeof(App).Assembly.FullName);
-}

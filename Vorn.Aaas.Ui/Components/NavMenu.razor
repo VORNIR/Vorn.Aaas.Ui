@@ -1,7 +1,8 @@
-﻿<MudNavMenu>
+﻿@inject AdditionalAssembliesRegistry registry
+<MudNavMenu>
     @foreach(var pageDetail in Pages)
     {
-        <MudNavLink Href="@pageDetail.Route" Match="NavLinkMatch.All">@pageDetail.Title</MudNavLink>
+        <MudNavLink Href="@pageDetail.Route" Icon="@pageDetail.Icon" Match="NavLinkMatch.All">@pageDetail.Title</MudNavLink>
     }
 </MudNavMenu>
 @code{
@@ -9,8 +10,7 @@
     protected override void OnInitialized()
     {
         var pagesWithDetails =
-            from a in AppDomain.CurrentDomain.GetAssemblies().AsParallel()
-            where a.FullName?.StartsWith("Vorn") ?? false
+            from a in registry.Assemblies
             from t in a.GetTypes().Where(x => x.IsSubclassOf(typeof(ComponentBase)))
             let attributes = t.GetCustomAttributes(typeof(PageDetails), true)
             where attributes != null && attributes.Length > 0

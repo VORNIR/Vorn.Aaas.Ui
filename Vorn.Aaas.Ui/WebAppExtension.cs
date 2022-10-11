@@ -1,11 +1,14 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.Extensions.DependencyInjection;
 using MudBlazor.Services;
+using System.Reflection;
+using Vorn.Aaas.Ui;
 
 public static class WebAppExtension
 {
-    public static void AddAaasUi(this WebApplicationBuilder builder)
+    public static void AddAaasUi(this WebApplicationBuilder builder, IEnumerable<Assembly>? additionalAssemblies = null)
     {
         string section = "Vorn:Aaas";
         builder.Services.AddAuthentication(options =>
@@ -32,10 +35,16 @@ public static class WebAppExtension
             c.DefaultPolicy = pb.Build();
         });
         builder.Services.AddMudServices();
-        builder.Services.AddRazorPages();
+        var mvc = builder.Services.AddRazorPages();
+        var execAss = Assembly.GetExecutingAssembly();
+        var callAss = Assembly.GetCallingAssembly();
+        mvc.AddApplicationPart(execAss);
+        mvc.AddApplicationPart(callAss);
         builder.Services.AddServerSideBlazor();
+        builder.Services.AddSingleton(new AdditionalAssembliesRegistry(callAss, additionalAssemblies));
+        builder.Services.AddTransient<ITagHelperComponent, AssetTags>();
     }
-    public static void Run(this WebApplicationBuilder builder )
+    public static void Run(this WebApplicationBuilder builder)
     {
         var app = builder.Build();
         app.UseExceptionHandler("/Error");

@@ -1,6 +1,6 @@
 ﻿@inherits LayoutComponentBase
 @using System.Security.Claims
-<MudThemeProvider />
+<MudThemeProvider Theme="Theme" />
 <MudDialogProvider />
 <MudSnackbarProvider />
 <AuthorizeView>
@@ -26,6 +26,7 @@
     {
         <MudDrawer @bind-Open="drawerOpen"
                Elevation="1"
+               Anchor="Anchor.Left"
                Style="@($"background:{Colors.Grey.Lighten2};")"
                Variant="@DrawerVariant.Temporary">
             <MudDrawerHeader Class="d-flex justify-center">
@@ -129,4 +130,24 @@
     {
         drawerOpen = !drawerOpen;
     }
+
+    MudTheme Theme = new MudTheme()
+        {
+            Typography = new Typography()
+            {
+                Default = new Default()
+                {
+                    FontFamily = new[] { "Segoe UI Local", "Segoe UI Web(West European)" },
+                    FontWeight = 100,
+                },
+                H1 = new H1
+                {
+                    FontWeight = 100
+                },
+                H3 = new H3
+                {
+                    FontWeight = 100
+                }
+            }
+        };
 }
